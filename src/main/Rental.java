@@ -31,11 +31,7 @@ public class Rental {
     }
 
     public int getFrequentRenterPoints() {
-        if (this.getMovie().equals(MovieType.NEW_RELEASE)
-                && this.getDayRented() > 1) {
-            return 2;
-        }
-        return 1;
+        return _movie.getFrequentRenterPoints(_dayRented);
     }
 
     public double getCharge() {

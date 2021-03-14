@@ -1,6 +1,10 @@
 package main;
 
 import main.enums.MovieType;
+import main.state.price.ChildrenPrice;
+import main.state.price.NewReleasePrice;
+import main.state.price.Price;
+import main.state.price.RegularPrice;
 
 public class Movie {
 
@@ -8,9 +12,12 @@ public class Movie {
 
     private MovieType _movieType;
 
+    private Price _price;
+
     public Movie(String _title, MovieType movieType) {
         this._title = _title;
         this._movieType = movieType;
+        setPrice(movieType);
     }
 
     public String getTitle() {
@@ -25,34 +32,34 @@ public class Movie {
         return _movieType;
     }
 
+    public void set_movieType(MovieType _movieType) {
+        this._movieType = _movieType;
+        setPrice(_movieType);
+    }
+
+    public Price getPrice() {
+        return _price;
+    }
+
     public double getCharge(int daysRented) {
-        double result = 0;
-        switch (this.getMovieType()) {
-            case REGULAR:
-                result += 2;
-                if (daysRented > 2) {
-                    result += (daysRented -2) * 1.5;
-                }
-                break;
-
-            case NEW_RELEASE:
-                result += daysRented * 3;
-                break;
-
-            case CHILDREN:
-                result += 1.5;
-                if (daysRented > 3)
-                    result += (daysRented - 3) * 1.5;
-                break;
-        }
-        return result;
+        return getPrice().getCharge(daysRented);
     }
 
     public int getFrequentRenterPoints(int daysRented) {
-        if (_movieType.equals(MovieType.NEW_RELEASE)
-                && daysRented > 1) {
-            return 2;
+        return getPrice().getFrequentRenterPoints(daysRented);
+    }
+
+    private void setPrice(MovieType movieType) {
+        switch (movieType) {
+            case NEW_RELEASE:
+                _price = new NewReleasePrice();
+                break;
+            case CHILDREN:
+                _price = new ChildrenPrice();
+                break;
+            case REGULAR:
+                _price = new RegularPrice();
+                break;
         }
-        return 1;
     }
 }
