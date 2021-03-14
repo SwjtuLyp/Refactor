@@ -8,9 +8,18 @@ public class Rental {
 
     private int _dayRented;
 
+    private int frequentRenterPoints;
+
     public Rental(Movie _movie, int _dayRented) {
         this._movie = _movie;
         this._dayRented = _dayRented;
+        this.frequentRenterPoints = 1;
+    }
+
+    public Rental(Movie _movie, int _dayRented, int frequentRenterPoints) {
+        this._movie = _movie;
+        this._dayRented = _dayRented;
+        this.frequentRenterPoints = frequentRenterPoints;
     }
 
     public Movie getMovie() {
@@ -21,26 +30,15 @@ public class Rental {
         return _dayRented;
     }
 
-    public double chargeFor() {
-        double result = 0;
-        switch (this.getMovie().getMovieType()) {
-            case REGULAR:
-                result += 2;
-                if (this.getDayRented() > 2) {
-                    result += (this.getDayRented() -2) * 1.5;
-                }
-                break;
-
-            case NEW_RELEASE:
-                result += (this.getDayRented()) * 3;
-                break;
-
-            case CHILDREN:
-                result += 1.5;
-                if (this.getDayRented() > 3)
-                    result += (this.getDayRented() - 3) * 1.5;
-                break;
+    public int getFrequentRenterPoints() {
+        if (this.getMovie().equals(MovieType.NEW_RELEASE)
+                && this.getDayRented() > 1) {
+            return 2;
         }
-        return result;
+        return 1;
+    }
+
+    public double getCharge() {
+        return _movie.getCharge(_dayRented);
     }
 }

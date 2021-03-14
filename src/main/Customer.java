@@ -1,6 +1,5 @@
 package main;
 
-import main.enums.MovieType;
 
 import java.util.Enumeration;
 import java.util.Vector;
@@ -27,10 +26,8 @@ public class Customer {
         while (rentals.hasMoreElements()) {
 
             Rental each = (Rental) rentals.nextElement();
-            double thisAmount = each.chargeFor();
-            frequentRenterPoints ++;
-            if ((each.getMovie().equals(MovieType.NEW_RELEASE)) && each.getDayRented() > 1)
-                frequentRenterPoints ++;
+            double thisAmount = each.getCharge();
+            frequentRenterPoints += each.getFrequentRenterPoints();
             result += "\t" + each.getMovie().getTitle() + "\t" + String.valueOf(thisAmount) + "\n";
             totalAmount += thisAmount;
         }
