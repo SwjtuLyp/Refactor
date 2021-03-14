@@ -1,5 +1,7 @@
 package main;
 
+import main.enums.MovieType;
+
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -24,30 +26,10 @@ public class Customer {
         String result = "main.Rental Record for " + getName() + "\n";
         while (rentals.hasMoreElements()) {
 
-            double thisAmount = 0;
             Rental each = (Rental) rentals.nextElement();
-            switch (each.getMovie().getPrinceCode()) {
-                case Movie.REGULAR:
-                    thisAmount += 2;
-                    if (each.getDayRented() > 2) {
-                        thisAmount += (each.getDayRented() -2) * 1.5;
-                    }
-                    break;
-
-                case Movie.NEW_RELEASE:
-                    thisAmount += (each.getDayRented()) * 3;
-                    break;
-
-                case Movie.CHILDRENS:
-                    thisAmount += 1.5;
-                    if (each.getDayRented() > 3)
-                        thisAmount += (each.getDayRented() - 3) * 1.5;
-                    break;
-
-            }
-
+            double thisAmount = each.chargeFor();
             frequentRenterPoints ++;
-            if ((each.getMovie().getPrinceCode() == Movie.NEW_RELEASE) && each.getDayRented() > 1)
+            if ((each.getMovie().equals(MovieType.NEW_RELEASE)) && each.getDayRented() > 1)
                 frequentRenterPoints ++;
             result += "\t" + each.getMovie().getTitle() + "\t" + String.valueOf(thisAmount) + "\n";
             totalAmount += thisAmount;
@@ -58,4 +40,5 @@ public class Customer {
                 " frequent renter points";
         return result;
     }
+
 }
